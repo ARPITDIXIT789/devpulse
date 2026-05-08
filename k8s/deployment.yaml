@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devpulse-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devpulse-backend
+  template:
+    metadata:
+      labels:
+        app: devpulse-backend
+    spec:
+      containers:
+        - name: backend
+          image: devpulse-backend:latest
+          ports:
+            - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devpulse-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devpulse-frontend
+  template:
+    metadata:
+      labels:
+        app: devpulse-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: devpulse-frontend:latest
+          ports:
+            - containerPort: 5173

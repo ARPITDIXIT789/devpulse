@@ -1,0 +1,16 @@
+{
+  "title": "DevPulse Dashboard",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Backend Availability",
+      "targets": [
+        {
+          "expr": "up{job=\"devpulse-backend\"}"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}
