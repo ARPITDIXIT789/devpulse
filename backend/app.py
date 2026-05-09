@@ -24,10 +24,10 @@ def create_app():
     db.init_app(app)
     JWTManager(app)
 
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(tasks_bp)
-    app.register_blueprint(dashboard_bp)
-    app.register_blueprint(profile_bp)
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    app.register_blueprint(tasks_bp, url_prefix="/api/tasks")
+    app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")
+    app.register_blueprint(profile_bp, url_prefix="/api/profile")
 
     @app.get("/health")
     def health():
@@ -42,3 +42,4 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")), debug=True)
+
