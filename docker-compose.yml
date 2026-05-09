@@ -1,22 +1,32 @@
-version: "3.9"
 services:
   db:
     image: postgres:16
     container_name: devpulse-db
+
     environment:
       POSTGRES_DB: devpulse
       POSTGRES_USER: devpulse
       POSTGRES_PASSWORD: devpulse
+
     ports:
       - "5432:5432"
+
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devpulse -d devpulse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
+
     container_name: devpulse-backend
+
     environment:
       SECRET_KEY: change-me
       JWT_SECRET_KEY: change-me-too
@@ -26,8 +36,11 @@ services:
       GITHUB_TOKEN: ""
       GITHUB_USERNAME: ""
       GITHUB_REPOS: ""
+
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
     ports:
       - "5000:5000"
 
@@ -35,11 +48,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+
     container_name: devpulse-frontend
+
     environment:
       VITE_API_BASE_URL: http://localhost:5000/api
+
     depends_on:
       - backend
+
     ports:
       - "5173:5173"
 
