@@ -13,12 +13,12 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 def signup():
     data = request.get_json() or {}
 
-    name = data.get("name", "").strip()
-    email = data.get("email", "").strip().lower()
-    password = data.get("password", "")
+    name = data.get("name") or data.get("username")
+email = data.get("email")
+password = data.get("password")
 
-    if not name or not email or not password:
-        return jsonify({"message": "name, email and password are required"}), 400
+if not name or not email or not password:
+    return jsonify({"message": "name, email and password are required"}), 400
 
     if User.query.filter_by(email=email).first():
         return jsonify({"message": "Email already registered"}), 409
